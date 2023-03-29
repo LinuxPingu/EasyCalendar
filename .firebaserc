@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "fbtester-e3b82"
+  },
+  "targets": {
+    "fbtester-e3b82": {
+      "hosting": {
+        "EasyCalendar": [
+          "fbtester-e3b82"
+        ]
+      }
+    }
+  }
+}

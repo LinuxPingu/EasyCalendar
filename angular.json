@@ -51,7 +51,13 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -91,8 +97,21 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "EasyCalendar:build:production",
+            "firebaseProject": "fbtester-e3b82",
+            "firebaseHostingSite": "fbtester-e3b82"
+          }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "1c0bcafb-d1f5-4ce8-bb72-e72664f39994"
   }
 }
