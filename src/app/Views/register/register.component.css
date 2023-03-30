@@ -1,0 +1,10 @@
+.box-sides{
+    margin-left: 50px; 
+    margin-right: 50px;
+}
+
+.card-custom{
+    border-radius: 25px; 
+    margin-top: 15px; 
+    margin-bottom: 15px;
+}
