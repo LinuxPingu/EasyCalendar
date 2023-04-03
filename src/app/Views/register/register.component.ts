@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/Services/user.service';
-import { User } from 'src/app/Models/user.model';
+import { User_Model } from 'src/app/Models/user.model';
 import Swal from 'sweetalert2';
 import { Helper } from 'src/app/Helpers/helper';
 @Component({
@@ -14,7 +14,7 @@ export class RegisterComponent {
 
   @Input() password2: string = "";
 
-  public new_user: User = {
+  public new_user: User_Model = {
     id_User: 'temp',
     email: '',
     username: '',
