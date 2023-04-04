@@ -1,0 +1,25 @@
+<nav class="navbar navbar-fixed-top navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand"> Easy Calendar </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <li *ngIf="cur_user.is_Admin" class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  System Administration
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="/landing-user">Users</a></li>
+                  <li><a class="dropdown-item" href="/tags">System tags</a></li>
+                </ul>
+            </li>
+          <a *ngIf="!cur_user.is_Admin" class="nav-link active" aria-current="page" href="/landing-user">Home</a>
+          <a class="nav-link"> Profile </a>
+          <a class="nav-link" href="#">Help</a>
+          <a (click)="logout()" class="nav-link mr-auto" href="/">logout</a>
+        </div>
+      </div>
+    </div>
+</nav>

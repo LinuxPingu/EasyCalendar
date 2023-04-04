@@ -4,7 +4,7 @@ import { User_Model } from '../Models/user.model';
 import { API_URL } from '../Helpers/app_constants';
 import { HttpClient } from '@angular/common/http';
 import { fetchSignInMethodsForEmail, signInWithPopup, signOut, UserCredential } from 'firebase/auth';
-import { Observable } from 'rxjs';
+import { interval, map, Observable, switchMap } from 'rxjs';
 
 @Injectable({
     providedIn:'root'
@@ -13,8 +13,18 @@ export class UserService{
 
     private readonly user_enpoint = 'UserData';
 
+    users_list:User_Model[] = [];
+
     private cur_uid:string = "";
 
+    cur_user:User_Model={
+        id_User: '',
+        email: '',
+        username: '',
+        password: '',
+        is_Admin: false,
+        is_Active: false
+    }
     constructor(private fbAuth:Auth, private http: HttpClient) { 
        
     }
@@ -55,7 +65,7 @@ export class UserService{
                 is_Admin: false,
                 is_Active: true
             }
-
+            
             this.post_user_to_API(new_user);
     }
 
@@ -102,10 +112,91 @@ export class UserService{
         return this.http.get<User_Model | null>(url); 
     }
 
+    get_all_users():User_Model[] {
+
+        let url:string = API_URL + this.user_enpoint+`/get-all`
+        let list:User_Model[] = [];
+
+        this.http.get<any[]>(url).pipe(
+            map((response: any[]) => {
+              if (!response) {
+                return [];
+              }
+              return response.map((item) => ({
+                id_User: item.id_User,
+                email: item.email,
+                username: item.username,
+                password: item.password,
+                is_Admin: item.is_Admin,
+                is_Active: item.is_Active
+              }));
+            })
+          ).subscribe((data: User_Model[]) => {
+            data.forEach(element => {
+                list.push(element);
+                console.log(` pushed ${element}`);    
+            });
+          });
+
+        return list;
+    }
+
+    get_users_obvs():Observable<User_Model[]>{
+        
+        let url = API_URL + this.user_enpoint+`/get-all`;
+        return interval(5000).pipe(
+            switchMap(() => this.http.get<User_Model[]>(url)),
+            map(users => users.map(user => ({
+              id_User: user.id_User,
+              email: user.email,
+              username: user.username,
+              password: user.password,
+              is_Admin: user.is_Admin,
+              is_Active: user.is_Active
+            }
+           )))
+        );
+    }
+
     refersh_auth(){
         if(this.fbAuth.currentUser != null){
             this.cur_uid = this.fbAuth.currentUser.uid;
         }
+    }
+
+    get_current_logged_user():User_Model{
+        this.refersh_auth();
+        this.get_user_by_UID().subscribe(
+          doc =>{
+            if(doc != null){
+              this.build_user(doc.id_User,doc.email,doc.username,doc.password,doc.is_Admin,doc.is_Active)
+            }
+          }
+        )
+        return this.cur_user
+    }
+
+    build_user(id:string,email:string,username:string,password:string,isAdmin:boolean,isActive:boolean){
+        this.cur_user.id_User =id ;
+        this.cur_user.email = email;
+        this.cur_user.username = username;
+        this.cur_user.password = password;
+        this.cur_user.is_Admin = isAdmin;
+        this.cur_user.is_Active = isActive;
+    
+        console.log(`Built user ${this.cur_user.email}`);
+    }
+
+
+    update_user(user:User_Model){
+        let url = API_URL + this.user_enpoint+`/update-user/${user.id_User}`
+        return this.http.put(url,user);
+    }
+
+    delete_user(user:User_Model){
+        let url = API_URL + this.user_enpoint+`/delete-user/${user.id_User}`
+        console.log(url)
+        return this.http.delete(url);
     }
 
     logout() {

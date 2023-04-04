@@ -1,3 +1,7 @@
-<p>landing-user works!</p>
-<button (click)="logout()" type="button" class="btn btn-primary btn-lg"
-style="padding-left: 2.5rem; padding-right: 2.5rem;">Logout</button>
+<app-top-bar></app-top-bar>
+<section *ngIf="cur_user.is_Admin">
+    <app-admin></app-admin>
+</section>
+<section *ngIf="!cur_user.is_Admin">
+    <app-user></app-user>
+</section>
