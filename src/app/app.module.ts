@@ -18,7 +18,8 @@ import { ProfileComponent } from './Views/profile/profile.component';
 import { TopBarComponent } from './Views/Shared/top-bar/top-bar.component';
 import { TagsComponent } from './Views/landing-user/tags/tags.component';
 import { ModalComponent } from './Views/Shared/modal/modal.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbAlertModule, NgbDateStruct, NgbDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { JsonPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     FormsModule,
     NgbModule,
     HttpClientModule,
+    NgbDatepicker,
+    NgbAlertModule,
+    JsonPipe,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
@@ -47,4 +51,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule { 
+
+}

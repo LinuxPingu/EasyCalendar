@@ -5,6 +5,8 @@ import { API_URL } from '../Helpers/app_constants';
 import { HttpClient } from '@angular/common/http';
 import { fetchSignInMethodsForEmail, signInWithPopup, signOut, UserCredential } from 'firebase/auth';
 import { interval, map, Observable, switchMap } from 'rxjs';
+import { User_Info_Model } from '../Models/user-info.model';
+import { Helper } from 'src/app/Helpers/helper';
 
 @Injectable({
     providedIn:'root'
@@ -12,10 +14,13 @@ import { interval, map, Observable, switchMap } from 'rxjs';
 export class UserService{
 
     private readonly user_enpoint = 'UserData';
+    private readonly user_info_enpoint = 'UserInfo';
 
     users_list:User_Model[] = [];
 
     private cur_uid:string = "";
+
+    private helper:Helper = new Helper();
 
     cur_user:User_Model={
         id_User: '',
@@ -25,13 +30,32 @@ export class UserService{
         is_Admin: false,
         is_Active: false
     }
-    constructor(private fbAuth:Auth, private http: HttpClient) { 
-       
+
+    cur_user_info:User_Info_Model={
+        id_User: this.cur_user.id_User,
+        name: '',
+        last_name: '',
+        phone: '',
+        birthday: ''
     }
+
+    constructor(private fbAuth:Auth, private http: HttpClient) { }
    
     post_user_to_API(new_user:User_Model){
         let url = API_URL + this.user_enpoint;
         let data = JSON.stringify(new_user);
+        let headers = { 'Content-Type': 'application/json' };
+
+        this.http.post(url, data, { headers }).subscribe(response => {
+             console.log(response);
+         }, error => {
+             console.error(error);
+         });   
+    }
+
+    post_user_info_to_API(new_user_info:User_Info_Model){
+        let url = API_URL + this.user_info_enpoint;
+        let data = JSON.stringify(new_user_info);
         let headers = { 'Content-Type': 'application/json' };
 
         this.http.post(url, data, { headers }).subscribe(response => {
@@ -112,6 +136,18 @@ export class UserService{
         return this.http.get<User_Model | null>(url); 
     }
 
+    get_user_info_by_UID(uid?:string):Observable<User_Info_Model | null>{
+        this.refersh_auth();
+        let url = "";
+        if(this.cur_uid === null || this.cur_uid === ""){
+            url = API_URL + this.user_info_enpoint+`/${uid}`
+        }else{
+            url = API_URL + this.user_info_enpoint+`/${this.cur_uid}`
+        }
+        
+        return this.http.get<User_Info_Model | null>(url); 
+    }
+
     get_all_users():User_Model[] {
 
         let url:string = API_URL + this.user_enpoint+`/get-all`
@@ -176,6 +212,26 @@ export class UserService{
         return this.cur_user
     }
 
+    async get_current_user_info():Promise<User_Info_Model | null>{
+        this.refersh_auth();
+        return new Promise<User_Info_Model | null>((resolve, reject)=>{
+            this.get_user_info_by_UID().subscribe(
+                (info) =>{
+                    if (info != null){
+                        this.cur_user_info = Helper.build_user_info(info.id_User, info.name, info.last_name, info.phone, info.birthday);
+                        console.log(this.cur_user_info);  
+                        resolve(this.cur_user_info);
+                    }else{
+                        resolve(null);
+                    }
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
+        });
+    }
+
     build_user(id:string,email:string,username:string,password:string,isAdmin:boolean,isActive:boolean){
         this.cur_user.id_User =id ;
         this.cur_user.email = email;
@@ -187,10 +243,14 @@ export class UserService{
         console.log(`Built user ${this.cur_user.email}`);
     }
 
-
     update_user(user:User_Model){
         let url = API_URL + this.user_enpoint+`/update-user/${user.id_User}`
         return this.http.put(url,user);
+    }
+
+    update_user_info(user_info:User_Info_Model){
+        let url = API_URL + this.user_info_enpoint+`/update-user-info/${user_info.id_User}`
+        return this.http.put(url,user_info);
     }
 
     delete_user(user:User_Model){

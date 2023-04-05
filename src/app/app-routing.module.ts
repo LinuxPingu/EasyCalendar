@@ -6,6 +6,7 @@ import { RegisterComponent } from './Views/register/register.component';
 import { canActivate,redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { TagsComponent } from './Views/landing-user/tags/tags.component';
 import { ModalComponent } from './Views/Shared/modal/modal.component';
+import { ProfileComponent } from './Views/profile/profile.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,11 @@ const routes: Routes = [
   {
     path:'modal',
     component:ModalComponent,
+    ...canActivate(()=> redirectUnauthorizedTo(['']))
+  },
+  {
+    path:'my-profile',
+    component:ProfileComponent,
     ...canActivate(()=> redirectUnauthorizedTo(['']))
   }
 ];
