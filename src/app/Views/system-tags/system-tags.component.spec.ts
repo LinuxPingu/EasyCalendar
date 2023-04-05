@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TagsComponent } from './tags.component';
+import { SystemTagsComponent } from './system-tags.component';
 
-describe('TagsComponent', () => {
-  let component: TagsComponent;
-  let fixture: ComponentFixture<TagsComponent>;
+describe('SystemTagsComponent', () => {
+  let component: SystemTagsComponent;
+  let fixture: ComponentFixture<SystemTagsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TagsComponent ]
+      declarations: [ SystemTagsComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(TagsComponent);
+    fixture = TestBed.createComponent(SystemTagsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

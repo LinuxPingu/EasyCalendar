@@ -1,0 +1,128 @@
+<app-top-bar></app-top-bar>
+<section *ngIf="!is_Editing">
+  <div class="container-fluid justify-content-center align-items-center">
+    <div class="card text-black card-custom">
+      <div class="card-body">
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <div class="col d-flex justify-content-center align-items-center">
+              <img
+                src="https://blogs.sap.com/wp-content/uploads/2018/09/question.png"
+                alt=""
+              />
+            </div>
+            <div class="col">
+              <div class="container-fluid">
+                <div class="row justify-content-center my-5">
+                  <h1>No tags?</h1>
+                </div>
+                <div class="row justify-content-center">
+                  <h3>Try creating new tags here!</h3>
+                  <button
+                    (click)="Add_Tags()"
+                    type="button cstm-button"
+                    class="btn btn-outline-success"
+                    style="width: 70%; margin-top: 5%; margin-right: 15%"
+                  >
+                    Create tags now!
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section *ngIf="is_Editing && data != null">
+  <div class="container-fluid">
+    <h2 class="titles tag-title">All system tags</h2>
+    <button (click)="create_new_tag()"  type="button" class="btn btn-outline-success add-tag-btn"><i class="fa-solid fa-plus"></i> Add Tag</button>
+    <table class="table table-striped" style="width: 100%">
+      <thead>
+        <tr>
+          <th scope="col">Tag number</th>
+          <th scope="col">Name</th>
+          <th scope="col">Manage </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tag of data.tags; index as i">
+          <th scope="row">{{i + 1}}</th>
+          <td>
+            {{ tag }}
+          </td>
+          <td>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+                  <button
+                    (click)="edit(i)"
+                    style="width: 100%; background-color: #f5bf49"
+                  >
+                    <i class="fa-solid fa-pencil"></i>
+                  </button>
+                </div>
+                <div class="col">
+                  <button
+                    (click)="delete(i)"
+                    style="width: 100%; background-color: #ff3526"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!--form modal-->
+<div
+  class="modal fade"
+  id="myModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 *ngIf="data != null" class="modal-title" id="exampleModalLabel"> Selected tag </h5>
+        <h5 *ngIf="data === null" class="modal-title" id="exampleModalLabel"> Create the first tag </h5>
+        <button
+          (click)="reset_modal()"
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-outline flex-fill mb-0">
+          <label class="form-label" for="usertnametxt"> Tag: </label>
+          <input [(ngModel)]="selected_tag" name="username" type="text" id="usertnamtext" value="{{selected_tag}}" class="form-control" />
+        </div>
+
+      <div class="modal-footer">
+        <button (click)="reset_modal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button *ngIf="data === null" type="button" class="btn btn-primary" (click)="save_first_tag()">
+          Create
+        </button>
+        <button *ngIf="data != null && !creating_new_tag" type="button" class="btn btn-primary" (click)="save_first_tag()">
+            Save changes
+        </button>
+        <button *ngIf="data != null && creating_new_tag" type="button" class="btn btn-primary" (click)="save_first_tag()">
+          Save changes
+      </button>
+      </div>
+    </div>
+  </div>
+</div>

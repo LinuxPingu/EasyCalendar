@@ -16,10 +16,10 @@ import { AdminComponent } from './Views/landing-user/admin/admin.component';
 import { UserComponent } from './Views/landing-user/user/user.component';
 import { ProfileComponent } from './Views/profile/profile.component';
 import { TopBarComponent } from './Views/Shared/top-bar/top-bar.component';
-import { TagsComponent } from './Views/landing-user/tags/tags.component';
 import { ModalComponent } from './Views/Shared/modal/modal.component';
 import { NgbAlertModule, NgbDateStruct, NgbDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { JsonPipe } from '@angular/common';
+import { SystemTagsComponent } from './Views/system-tags/system-tags.component';
 
 @NgModule({
   declarations: [
@@ -31,8 +31,8 @@ import { JsonPipe } from '@angular/common';
     UserComponent,
     ProfileComponent,
     TopBarComponent,
-    TagsComponent,
     ModalComponent,
+    SystemTagsComponent,
   ],
   imports: [
     BrowserModule,

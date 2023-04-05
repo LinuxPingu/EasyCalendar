@@ -4,9 +4,9 @@ import { LandingUserComponent } from './Views/landing-user/landing-user.componen
 import { LoginComponent } from './Views/login/login.component';
 import { RegisterComponent } from './Views/register/register.component';
 import { canActivate,redirectUnauthorizedTo } from '@angular/fire/auth-guard';
-import { TagsComponent } from './Views/landing-user/tags/tags.component';
 import { ModalComponent } from './Views/Shared/modal/modal.component';
 import { ProfileComponent } from './Views/profile/profile.component';
+import { SystemTagsComponent } from './Views/system-tags/system-tags.component';
 
 const routes: Routes = [
   {
@@ -23,11 +23,6 @@ const routes: Routes = [
     ...canActivate(()=> redirectUnauthorizedTo(['']))
   },
   {
-    path:'tags',
-    component:TagsComponent,
-    ...canActivate(()=> redirectUnauthorizedTo(['']))
-  },
-  {
     path:'modal',
     component:ModalComponent,
     ...canActivate(()=> redirectUnauthorizedTo(['']))
@@ -35,6 +30,11 @@ const routes: Routes = [
   {
     path:'my-profile',
     component:ProfileComponent,
+    ...canActivate(()=> redirectUnauthorizedTo(['']))
+  },
+  {
+    path:'system-tags',
+    component:SystemTagsComponent,
     ...canActivate(()=> redirectUnauthorizedTo(['']))
   }
 ];
