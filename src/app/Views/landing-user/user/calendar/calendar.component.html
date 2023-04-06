@@ -1,0 +1,74 @@
+<div class="container-fluid" *ngIf="dataReady">
+    <mwl-calendar-month-view
+  name="MonthViewDay"
+  [viewDate]="viewDate"
+  [events]="events"
+  (dayClicked)="dayClicked($event)"
+  (eventClicked)="eventClicked($event)"
+  [headerTemplate]="header"
+>
+  <ng-template #cellTemplate let-day="day" let-locale="locale">
+    <div class="cal-cell-top">
+      <b>{{ day.date | date: 'd' }}</b>&nbsp;
+      <span>{{ day.date | date: 'EEE' }}</span>
+    </div>
+    <div class="cal-cell-bottom">
+      <mwl-calendar-event *ngFor="let event of day.events" [event]="event">
+        {{ event.title }}
+      </mwl-calendar-event>
+    </div>
+  </ng-template>
+</mwl-calendar-month-view>
+
+<ng-template #header>
+    <div class="d-flex justify-content-center align-items-center header_calendar">
+      <button class="btn btn-primary month_buttons" type="button" mat-icon-button (click)="decrement()">
+        <mat-icon> Previous Month </mat-icon>
+      </button>
+      <h3 class="m-0">{{ getTitle() }}</h3>
+      <button class="btn btn-primary month_buttons" type="button" mat-icon-button (click)="increment()">
+        <mat-icon> Next Month </mat-icon>
+      </button>
+    </div>
+  </ng-template>
+</div>
+
+
+<!--form modal-->
+<div
+  class="modal fade"
+  id="myModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"> Selected User </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="form-outline flex-fill mb-0">
+          <label class="form-label" for="usertnametxt"> Title: </label>
+          <input [(ngModel)]="empty_event.title" name="username" type="text" id="usertnamtext" value="{{empty_event.title}}" class="form-control" />
+        </div>
+        <div class="form-outline flex-fill mb-0">
+          <label class="form-label" for="emailtxt"> Description: </label>
+          <input [(ngModel)]="empty_event.description" name="email" type="text" id="emailtxt" value="{{empty_event.description}}" class="form-control" />
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        Close
+      </button>
+      <button type="button" class="btn btn-primary" (click)="save_event()">
+        Save changes
+      </button>
+  </div>
+</div>

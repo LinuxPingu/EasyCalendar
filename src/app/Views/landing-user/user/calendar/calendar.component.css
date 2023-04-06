@@ -1,0 +1,36 @@
+.mwl-calendar-month-view {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px;
+  }
+  
+  .mwl-calendar-month-view .cal-day-header {
+    font-weight: bold;
+    text-align: center;
+    padding: 5px;
+    background-color: #f7f7f7;
+  }
+  
+  .mwl-calendar-month-view .cal-day-cell {
+    border: 1px solid #ccc;
+    padding: 5px;
+    background-color: #fff;
+  }
+  
+  .mwl-calendar-month-view .cal-day-cell.cal-in-month {
+    background-color: #f7f7f7;
+  }
+  
+  .mwl-calendar-month-view .cal-day-cell.cal-out-month {
+    color: #ccc;
+  }
+
+  .month_buttons{
+    margin-left: 3%;
+    margin-right: 3%;
+  }
+
+  .header_calendar{
+    margin-top: 2%;
+    margin-bottom: 2%;
+  }

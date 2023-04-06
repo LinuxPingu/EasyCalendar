@@ -212,6 +212,14 @@ export class UserService{
         return this.cur_user
     }
 
+    get_uid():string | null{
+        if(this.fbAuth.currentUser != null){
+            return this.fbAuth.currentUser.uid;
+        }else{
+            return null;
+        }
+    }
+
     async get_current_user_info():Promise<User_Info_Model | null>{
         this.refersh_auth();
         return new Promise<User_Info_Model | null>((resolve, reject)=>{

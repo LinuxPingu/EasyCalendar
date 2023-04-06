@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule,  CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -18,8 +18,11 @@ import { ProfileComponent } from './Views/profile/profile.component';
 import { TopBarComponent } from './Views/Shared/top-bar/top-bar.component';
 import { ModalComponent } from './Views/Shared/modal/modal.component';
 import { NgbAlertModule, NgbDateStruct, NgbDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { JsonPipe } from '@angular/common';
+import { DatePipe, JsonPipe } from '@angular/common';
 import { SystemTagsComponent } from './Views/system-tags/system-tags.component';
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { CalendarComponent } from './Views/landing-user/user/calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +36,7 @@ import { SystemTagsComponent } from './Views/system-tags/system-tags.component';
     TopBarComponent,
     ModalComponent,
     SystemTagsComponent,
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,10 +50,12 @@ import { SystemTagsComponent } from './Views/system-tags/system-tags.component';
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideDatabase(() => getDatabase()),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory })
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [DatePipe],
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { 
 

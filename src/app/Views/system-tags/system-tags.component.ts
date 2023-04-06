@@ -1,6 +1,6 @@
 import { Component,OnInit,OnDestroy } from '@angular/core';
 import { System_Tags_Model } from 'src/app/Models/system-tags.model';
-import { TagsServiceService } from 'src/app/Services/tags.service.service';
+import { TagsServiceService } from 'src/app/Services/tags.service';
 import Swal from 'sweetalert2';
 
 declare var window: any;
