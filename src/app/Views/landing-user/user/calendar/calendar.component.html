@@ -35,40 +35,51 @@
 
 
 <!--form modal-->
-<div
-  class="modal fade"
-  id="myModal"
-  tabindex="-1"
-  aria-labelledby="exampleModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"> Selected User </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <h5 class="modal-title" id="exampleModalLabel">Selected User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <div class="form-outline flex-fill mb-0">
-          <label class="form-label" for="usertnametxt"> Title: </label>
+          <label class="form-label" for="usertnametxt">Title:</label>
           <input [(ngModel)]="empty_event.title" name="username" type="text" id="usertnamtext" value="{{empty_event.title}}" class="form-control" />
         </div>
         <div class="form-outline flex-fill mb-0">
-          <label class="form-label" for="emailtxt"> Description: </label>
+          <label class="form-label" for="emailtxt">Description:</label>
           <input [(ngModel)]="empty_event.description" name="email" type="text" id="emailtxt" value="{{empty_event.description}}" class="form-control" />
         </div>
+        <div class="form-check form-switch mb-0" style="margin-top: 2%;">
+          <label class="form-check-label" for="evnt_time">Time of the event: </label>
+          <ngb-timepicker id="evnt_time" name="evnt_time" [(ngModel)]="event_time" [meridian]="meridian"></ngb-timepicker>
+        </div>
+        <div class="form-check form-switch mb-0" style="margin-top: 2%;margin-bottom: 2%;">
+          <label class="form-check-label" for="has_reminder">Has Reminder</label>
+          <input [(ngModel)]="empty_event.has_reminder" class="form-check-input" type="checkbox" id="has_reminder" name="has_reminder">
+        </div>
+        <div *ngIf="empty_event.has_reminder" class="container-fluid justify-content-center align-items-center" style="margin-top: 2%;">
+        <div class="row">
+          <div class="input-group">
+            <div class="input-group-prepend">
+              <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+            </div>
+            <input name="calendar" [(ngModel)]="reminder_Date" type="text" class="form-control" placeholder="Select date" ngbDatepicker #d="ngbDatepicker" [readOnly]="true">
+            <div class="input-group-append">
+              <button [disabled]="!empty_event.has_reminder" class="btn btn-outline-secondary" (click)="d.toggle()">Select Date</button>
+            </div>
+          </div>
+        </div>
+        <div class="row ">
+          <ngb-timepicker [(ngModel)]="reminder_time" [meridian]="meridian"></ngb-timepicker>
+        </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="save_event()">Save changes</button>
+      </div>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-        Close
-      </button>
-      <button type="button" class="btn btn-primary" (click)="save_event()">
-        Save changes
-      </button>
   </div>
 </div>

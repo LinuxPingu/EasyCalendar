@@ -1,4 +1,5 @@
 export interface Event_Model{
+    event_id:string,
     title:string,
     description:string,
     date:string,

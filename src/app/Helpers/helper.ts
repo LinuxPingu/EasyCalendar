@@ -1,5 +1,6 @@
 import { User_Info_Model } from 'src/app/Models/user-info.model';
 import { User_Model } from 'src/app/Models/user.model';
+import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 
 export class Helper{
     /*Checks if all spaces Are filled*/ 
@@ -75,7 +76,15 @@ export class Helper{
     date.setDate(d);
     date.setMonth(m);
     date.setFullYear(y);
-    console.log(date)
     return date;
   }
+
+  static set_time_to_dates(date:Date, time:NgbTimeStruct):Date{
+    date.setHours(time.hour);
+    date.setMinutes(time.minute);
+    date.setSeconds(0);
+
+    return date;
+  }
+
 }
