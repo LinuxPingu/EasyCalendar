@@ -11,6 +11,7 @@ import { Helper } from 'src/app/Helpers/helper';
 import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTimepicker} from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
+import { v4 as uuidv4 } from 'uuid';
 
 declare var window: any;
 
@@ -37,6 +38,8 @@ export class CalendarComponent implements OnDestroy, OnInit {
   events: CalendarEvent[] = [];
 
   cur_date:Date = new Date();
+
+  is_Editing:boolean = false;
 
   user_events:User_Events_Model={
     uid: '',
@@ -108,16 +111,18 @@ export class CalendarComponent implements OnDestroy, OnInit {
   }
 
   dayClicked({ day }: { day: CalendarMonthViewDay }): void {
+    this.is_Editing = false;
     this.selected_date = day; 
     this.formModal.show();
   }
 
-  save_event(){
+  async save_event(){
+    console.log(this.user_events.events)
     try {
-      console.log(this.selected_date)
       // Create event on calendar the calendar UI 
+      const randomId: string = uuidv4();
       const new_event: CalendarEvent = {
-        id: '',
+        id: randomId,
         start: this.selected_date.date,
         end: this.selected_date.date,
         title: this.empty_event.title,
@@ -128,6 +133,7 @@ export class CalendarComponent implements OnDestroy, OnInit {
   
       /* Add event to API*/
       if(this.uid != null){
+        this.empty_event.event_id = randomId;
         // Event date with Date and Time
         let formated_event_date:Date = Helper.set_time_to_dates(this.selected_date.date,this.event_time);
         if(this.empty_event.has_reminder){
@@ -137,11 +143,11 @@ export class CalendarComponent implements OnDestroy, OnInit {
         }
         this.empty_event.date = formated_event_date.toISOString();
         this.user_events.uid = this.uid; 
-        let temp:Event_Model[] = this.user_events.events;
-        temp.push(this.empty_event);
-        this.user_events.events = temp;
+        await this.user_events.events.push(this.empty_event);
         // Post event to API
         this.event_service.post_events_to_API(this.user_events);
+        this.reset_empty_event();
+        window.location.reload();
       }
 
       Swal.fire({
@@ -159,6 +165,55 @@ export class CalendarComponent implements OnDestroy, OnInit {
         title: 'Oops...',
         text: 'Something went wrong',
       })
+    }
+  }
+
+  edit_event(){
+    try {
+      /* Replace in list */
+      this.user_events.events.forEach(element => {
+          if(element.event_id === this.empty_event.event_id){
+            element = this.empty_event;
+          }
+      });
+
+      /*Replace in UI*/
+      this.events.forEach(e =>{
+        if(e.id === this.empty_event.event_id){
+            e.id = this.empty_event.event_id,
+            e.start = Helper.fix_date_ISO(this.empty_event.date),
+            e.title = this.empty_event.title
+            this.cdr.detectChanges();
+        }
+      }); 
+      this.event_service.post_events_to_API(this.user_events);
+      this.reset_empty_event();
+      window.location.reload();
+    } catch (error) {
+      
+    }
+  }
+
+  delete_event(){
+    try {
+      /* Replace in UI */
+      this.events.forEach(element => {
+          if(element.id === this.empty_event.event_id){
+            this.events.splice(this.events.indexOf(element),1);
+          }
+      });
+
+      /*Replace in list*/
+      this.user_events.events.forEach(element => {
+        if(element.event_id === this.empty_event.event_id){
+          this.user_events.events.splice(this.user_events.events.indexOf(element),1);
+        }
+      });
+      this.event_service.post_events_to_API(this.user_events);
+      this.reset_empty_event();
+      window.location.reload();
+    }catch(e){
+
     }
   }
 
@@ -196,8 +251,15 @@ export class CalendarComponent implements OnDestroy, OnInit {
     return temp;
   }
 
-  eventClicked({event}: {event: CalendarEvent}): void {
+  async eventClicked({event}: {event: CalendarEvent}) {
+    this.is_Editing = true;
     console.log('clicked event', event);
+    let event_model_element: Event_Model | undefined = await this.user_events.events.find((p:Event_Model) => p.event_id === event.id);
+    console.log(event_model_element);
+    if(event_model_element != undefined ){
+      this.empty_event = event_model_element;
+      this.formModal.show();
+    }
   }
   
   getTitle(): string | null {
@@ -208,4 +270,13 @@ export class CalendarComponent implements OnDestroy, OnInit {
 		this.meridian = !this.meridian;
 	}
 
+  reset_empty_event(){
+    this.empty_event.event_id = ''
+    this.empty_event.title = ''
+    this.empty_event.description = ''
+    this.empty_event.date = ''
+    this.empty_event.has_reminder = false
+    this.empty_event.reminder = ''
+    this.empty_event.tags = []
+  }
 }
