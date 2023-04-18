@@ -147,23 +147,26 @@ export class CalendarComponent implements OnDestroy, OnInit {
         // Post event to API
         this.event_service.post_events_to_API(this.user_events);
         this.reset_empty_event();
-        window.location.reload();
       }
 
       Swal.fire({
         position: 'center',
         icon: 'success',
         title: `Event created! `,
-        showConfirmButton: false,
-        timer: 1500
+        showConfirmButton: true,
+        confirmButtonText: 'ok'
+      }).then((result) => {
+        if(result.isConfirmed){
+          window.location.reload();
+        }
       })
 
     } catch (error) {
-      let err_msg = error instanceof Error
+      let asError = error as Error;
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Something went wrong',
+        text: asError.message,
       })
     }
   }
@@ -188,32 +191,65 @@ export class CalendarComponent implements OnDestroy, OnInit {
       }); 
       this.event_service.post_events_to_API(this.user_events);
       this.reset_empty_event();
-      window.location.reload();
-    } catch (error) {
       
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: `Event edited! `,
+        showConfirmButton: true,
+        confirmButtonText: 'ok'
+      }).then((result) => {
+        if(result.isConfirmed){
+          window.location.reload();
+        }
+      })
+    } catch (error) {
+      let asError = error as Error;
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: asError.message,
+      })
     }
   }
 
-  delete_event(){
+  delete_event() {
     try {
-      /* Replace in UI */
-      this.events.forEach(element => {
-          if(element.id === this.empty_event.event_id){
-            this.events.splice(this.events.indexOf(element),1);
-          }
-      });
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          /* Replace in UI */
+          this.events.forEach(element => {
+            if (element.id === this.empty_event.event_id) {
+              this.events.splice(this.events.indexOf(element), 1);
+            }
+          });
 
-      /*Replace in list*/
-      this.user_events.events.forEach(element => {
-        if(element.event_id === this.empty_event.event_id){
-          this.user_events.events.splice(this.user_events.events.indexOf(element),1);
+          /*Replace in list*/
+          this.user_events.events.forEach(element => {
+            if (element.event_id === this.empty_event.event_id) {
+              this.user_events.events.splice(this.user_events.events.indexOf(element), 1);
+            }
+          });
+          this.event_service.post_events_to_API(this.user_events);
+          this.reset_empty_event();
+          window.location.reload();
         }
-      });
-      this.event_service.post_events_to_API(this.user_events);
-      this.reset_empty_event();
-      window.location.reload();
-    }catch(e){
-
+      })
+    } catch (e) {
+      let asError = e as Error;
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: asError.message,
+      })
     }
   }
 
