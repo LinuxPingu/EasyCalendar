@@ -15,7 +15,15 @@
                   <li><a class="dropdown-item" href="/system-tags">System tags</a></li>
                 </ul>
             </li>
-          <a *ngIf="!cur_user.is_Admin" class="nav-link active" aria-current="page" href="/landing-user">Home</a>
+          <li *ngIf="!cur_user.is_Admin" class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              My Space
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="/landing-user">My Calendar</a></li>
+              <li><a class="dropdown-item" href="/user-tags">My Tags</a></li>
+            </ul>
+          </li>
           <a class="nav-link" href="/my-profile"> Profile </a>
           <a class="nav-link" href="#">Help</a>
           <a (click)="logout()" class="nav-link mr-auto" href="/">logout</a>

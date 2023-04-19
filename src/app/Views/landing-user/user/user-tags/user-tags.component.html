@@ -1,0 +1,182 @@
+<app-top-bar></app-top-bar>
+<section *ngIf="!has_data && !is_Editing">
+  <div class="container-fluid justify-content-center align-items-center">
+    <div class="card text-black card-custom">
+      <div class="card-body">
+        <div class="container-fluid">
+          <div class="row justify-content-center">
+            <div class="col d-flex justify-content-center align-items-center">
+              <img
+                src="https://blogs.sap.com/wp-content/uploads/2018/09/question.png"
+                alt=""
+              />
+            </div>
+            <div class="col">
+              <div class="container-fluid">
+                <div class="row justify-content-center my-5">
+                  <h1>No tags?</h1>
+                </div>
+                <div class="row justify-content-center">
+                  <h3>Try creating new tags here!</h3>
+                  <button
+                    (click)="add_tags()"
+                    type="button cstm-button"
+                    class="btn btn-outline-success"
+                    style="width: 70%; margin-top: 5%; margin-right: 15%"
+                  >
+                    Create tags now!
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section *ngIf="has_data || is_Editing">
+  <div class="container-fluid">
+    <h2 class="titles tag-title">All your tags</h2>
+    <button
+      (click)="create_new_tag()"
+      type="button"
+      class="btn btn-outline-success add-tag-btn"
+    >
+      <i class="fa-solid fa-plus"></i> Add Tag
+    </button>
+    <table class="table table-striped" style="width: 100%">
+      <thead>
+        <tr>
+          <th scope="col">Tag number</th>
+          <th scope="col">Name</th>
+          <th scope="col">Manage</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tag of user_data.tags; index as i">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>
+            {{ tag }}
+          </td>
+          <td>
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+                  <button
+                    (click)="edit(i)"
+                    style="width: 100%; background-color: #f5bf49"
+                  >
+                    <i class="fa-solid fa-pencil"></i>
+                  </button>
+                </div>
+                <div class="col">
+                  <button
+                    (click)="delete(i)"
+                    style="width: 100%; background-color: #ff3526"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!--form modal-->
+<div
+  class="modal fade"
+  id="myModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <!--Creating first tag-->
+    <div *ngIf="!has_data" class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"> Create the first tag </h5>
+            <button
+              (click)="reset_modal()"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-outline flex-fill mb-0">
+                <label class="form-label" for="selected_tag"> Tag: </label>
+                <input [(ngModel)]="selected_tag" name="selected_tag" type="text" id="selected_tag" value="{{selected_tag}}" class="form-control" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button (click)="reset_modal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" (click)="save_tag()">
+              Create
+            </button>
+        </div>
+    </div>
+     <!--Creating a tag-->
+     <div *ngIf="has_data && creating_tag" class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"> Create a new tag </h5>
+            <button
+              (click)="reset_modal()"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-outline flex-fill mb-0">
+                <label class="form-label" for="selected_tag"> Tag: </label>
+                <input [(ngModel)]="selected_tag" name="selected_tag" type="text" id="selected_tag" value="{{selected_tag}}" class="form-control" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button (click)="reset_modal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" (click)="save_tag()">
+              Create
+            </button>
+        </div>
+    </div>
+     <!--Editing a tag-->
+     <div *ngIf="has_data && editing_tag" class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"> Edit Tag </h5>
+            <button
+              (click)="reset_modal()"
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+        </div>
+        <div class="modal-body">
+            <div class="form-outline flex-fill mb-0">
+                <label class="form-label" for="selected_tag"> Tag: </label>
+                <input [(ngModel)]="selected_tag" name="selected_tag" type="text" id="selected_tag" value="{{selected_tag}}" class="form-control" />
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button (click)="reset_modal()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" (click)="save_tag()">
+              Update
+            </button>
+        </div>
+    </div>
+</div>

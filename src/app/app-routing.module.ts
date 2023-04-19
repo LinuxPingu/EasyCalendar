@@ -7,6 +7,7 @@ import { canActivate,redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { ModalComponent } from './Views/Shared/modal/modal.component';
 import { ProfileComponent } from './Views/profile/profile.component';
 import { SystemTagsComponent } from './Views/system-tags/system-tags.component';
+import { UserTagsComponent } from './Views/landing-user/user/user-tags/user-tags.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,11 @@ const routes: Routes = [
     path:'system-tags',
     component:SystemTagsComponent,
     ...canActivate(()=> redirectUnauthorizedTo(['']))
+  },
+  {
+    path:'user-tags',
+    component:UserTagsComponent,
+    ...canActivate(() => redirectUnauthorizedTo(['']))
   }
 ];
 

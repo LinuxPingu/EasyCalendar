@@ -30,6 +30,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { UserTagsComponent } from './Views/landing-user/user/user-tags/user-tags.component';
 
 
 
@@ -46,6 +47,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     ModalComponent,
     SystemTagsComponent,
     CalendarComponent,
+    UserTagsComponent,
   ],
   imports: [
     BrowserModule,
