@@ -5,8 +5,8 @@ import { LoginComponent } from './Views/login/login.component';
 import { RegisterComponent } from './Views/register/register.component';
 import { canActivate,redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { ModalComponent } from './Views/Shared/modal/modal.component';
-import { ProfileComponent } from './Views/profile/profile.component';
-import { SystemTagsComponent } from './Views/system-tags/system-tags.component';
+import { ProfileComponent } from './Views/landing-user/profile/profile.component';
+import { SystemTagsComponent } from './Views/landing-user/admin/system-tags/system-tags.component';
 import { UserTagsComponent } from './Views/landing-user/user/user-tags/user-tags.component';
 
 const routes: Routes = [

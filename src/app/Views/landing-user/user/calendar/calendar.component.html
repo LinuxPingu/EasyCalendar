@@ -55,6 +55,14 @@
           <label class="form-check-label" for="evnt_time">Time of the event: </label>
           <ngb-timepicker id="evnt_time" name="evnt_time" [(ngModel)]="event_time" [meridian]="meridian"></ngb-timepicker>
         </div>
+        <div class="dropdown" style="margin-top: 2%;margin-bottom: 2%;">
+          <button name="tag_btn" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{selected_tag}}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a *ngFor="let item of tags" class="dropdown-item" (click)="on_select_tag(item)">{{item}}</a>
+          </div>
+        </div>
         <div class="form-check form-switch mb-0" style="margin-top: 2%;margin-bottom: 2%;">
           <label class="form-check-label" for="has_reminder">Has Reminder</label>
           <input [(ngModel)]="empty_event.has_reminder" class="form-check-input" type="checkbox" id="has_reminder" name="has_reminder">

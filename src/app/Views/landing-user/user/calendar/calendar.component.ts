@@ -12,6 +12,7 @@ import { NgbTimeStruct } from '@ng-bootstrap/ng-bootstrap';
 import { NgbTimepicker} from '@ng-bootstrap/ng-bootstrap';
 import Swal from 'sweetalert2';
 import { v4 as uuidv4 } from 'uuid';
+import { TagsServiceService } from 'src/app/Services/tags.service';
 
 declare var window: any;
 
@@ -37,9 +38,13 @@ export class CalendarComponent implements OnDestroy, OnInit {
 
   events: CalendarEvent[] = [];
 
+  tags:string[] =[];
+
   cur_date:Date = new Date();
 
   is_Editing:boolean = false;
+
+  selected_tag:string = "Tags";
 
   user_events:User_Events_Model={
     uid: '',
@@ -80,7 +85,8 @@ export class CalendarComponent implements OnDestroy, OnInit {
                private cdr: ChangeDetectorRef, 
                private datePipe: DatePipe, 
                private user_service:UserService,
-               private event_service:EventsService) 
+               private event_service:EventsService,
+               private tag_service:TagsServiceService) 
   {
     this.uid = this.user_service.get_uid();
     this.reminder_Date = {year:this.cur_date.getFullYear(),month:this.cur_date.getMonth()-1,day:this.cur_date.getDate()};
@@ -93,6 +99,12 @@ export class CalendarComponent implements OnDestroy, OnInit {
     );
 
     this.build_calendar();
+    if(this.uid != "" && this.uid != null){
+      this.tag_service.get_combined_tags(this.uid).then((res) =>{
+        this.tags = res;
+        console.log(this.tags)
+      })
+    }
     this.dataReady = true;
   }
 
@@ -112,7 +124,7 @@ export class CalendarComponent implements OnDestroy, OnInit {
 
   dayClicked({ day }: { day: CalendarMonthViewDay }): void {
     this.is_Editing = false;
-    this.selected_date = day; 
+    this.selected_date = day;
     this.formModal.show();
   }
 
@@ -314,5 +326,13 @@ export class CalendarComponent implements OnDestroy, OnInit {
     this.empty_event.has_reminder = false
     this.empty_event.reminder = ''
     this.empty_event.tags = []
+  }
+  my_tags(){
+    console.log(this.tags)
+  }
+  on_select_tag(tag:string){
+    this.empty_event.tags = [];
+    this.selected_tag = tag;
+    this.empty_event.tags.push(tag);
   }
 }

@@ -54,4 +54,36 @@ export class TagsServiceService  {
          console.error(error);
      });  
   }
+
+  async get_combined_tags(uid:string):Promise<string[]>{
+    let all_tags:string[] = [];
+
+      let url_sys:string = API_URL + this.sys_tags_enpoint+`/System`
+      let res_sys:Observable<System_Tags_Model |null> = this.http.get<System_Tags_Model>(url_sys).pipe(
+        map(res => res || null)
+      );
+
+      let url_usr:string = API_URL+this.usr_tags_enpoint+`/${uid}`;
+      let res_usr:Observable<User_Tags_Model | null> = this.http.get<User_Tags_Model>(url_usr).pipe(
+        map(res => res || null)
+      );  
+
+      await res_sys.subscribe((x) => {
+        if(x?.tags != null){
+          x.tags.forEach((x) =>{
+              all_tags.push(x);
+          })
+        }
+      });
+
+      await res_usr.subscribe((x) => {
+        if(x?.tags != null){
+          x.tags.forEach((x) =>{
+              all_tags.push(x);
+          })
+        }
+      });
+
+      return await all_tags;
+  }
 }
